@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -17,35 +19,36 @@ namespace Business.Concrete
             _cardal = cardal;
         }
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
             if (car.Description.Length<3)
             {
-                Console.WriteLine("Araba ismi minimun 2 karakterden oluşmalıdır.");
+                return new ErrorResult("Araba ismi minimun 2 karakterden oluşmalıdır.");
             }
             else if (car.DailyPrice<0)
             {
-                Console.WriteLine("Araba fiyatı 0'dan büyük olmalıdır.");
+                return new ErrorResult("Araba fiyatı 0'dan büyük olmalıdır.");
             }
             else
             {
                 _cardal.Add(car);
+                return new SuccessResult("Araba başarılı bir şekilde eklendi");
             }
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return _cardal.GetCarDetails();
+            return new SuccessDataResult<List<CarDetailDto>>(_cardal.GetCarDetails(),Messages.SuccessMessage);
         }
 
-        public List<Car> GetCarsByBrandId(int id)
+        public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
-            return _cardal.GetAll(p => p.BrandId == id);
+            return new SuccessDataResult<List<Car>>(_cardal.GetAll(p => p.BrandId == id));
         }
 
-        public List<Car> GetCarsByColorId(int id)
+        public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
-            return _cardal.GetAll(p => p.ColorId == id);
+            return new SuccessDataResult<List<Car>>(_cardal.GetAll(p => p.ColorId == id));
         }
     }
 }

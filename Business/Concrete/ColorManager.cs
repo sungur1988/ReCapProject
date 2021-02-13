@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Results;
 using DataAccess.Concrete.EfCarDal;
 using Entities.Concrete;
 using System;
@@ -16,15 +17,15 @@ namespace Business.Concrete
             _colordal = colordal;
         }
 
-        public List<Color> GetAll()
+        public IDataResult<List<Color>> GetAll()
         {
-            return _colordal.GetAll();
+            return new SuccessDataResult<List<Color>>(_colordal.GetAll());
         }
 
 
-        public Color GetById(int id)
+        public IDataResult<Color> GetById(int id)
         {
-            return _colordal.Get(c => c.ColorId == id);
+            return new SuccessDataResult<Color>(_colordal.Get(c => c.ColorId == id));
         }
     }
 }
