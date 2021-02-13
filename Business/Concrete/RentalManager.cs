@@ -20,8 +20,8 @@ namespace Business.Concrete
 
         public IResult Add(Rental rental)
         {
-            var result = _rentalDal.Get(r => r.CarId == rental.CarId);
-            if (!(result.RentDate == null))
+            var result = IsRentable(rental.CarId);
+            if (!result.Success)
             {
                 return new ErrorResult(Messages.AddedErrorMessage);
             }
@@ -31,22 +31,34 @@ namespace Business.Concrete
 
         public IResult Delete(Rental rental)
         {
-            throw new NotImplementedException();
+            _rentalDal.Delete(rental);
+            return new SuccessResult();
         }
 
         public IDataResult<List<Rental>> GetAll()
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
         }
 
         public IDataResult<Rental> GetById(int id)
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<Rental>(_rentalDal.Get(r=>r.Id==id));
+        }
+
+        public IResult IsRentable(int id)
+        {
+            var result = _rentalDal.Get(r => r.CarId == id);
+            if (result.ReturnDate==null)
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult();
         }
 
         public IResult Update(Rental rental)
         {
-            throw new NotImplementedException();
+            _rentalDal.Delete(rental);
+            return new SuccessResult();
         }
     }
 }
