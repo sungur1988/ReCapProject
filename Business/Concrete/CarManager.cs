@@ -36,6 +36,17 @@ namespace Business.Concrete
             }
         }
 
+        public IResult Delete(Car car)
+        {
+            _cardal.Delete(car);
+            return new SuccessResult(Messages.SuccessMessage);
+        }
+
+        public IDataResult<Car> GetById(int id)
+        {
+            return new SuccessDataResult<Car>(_cardal.Get(c=>c.CarId==id),Messages.SuccessMessage);
+        }
+
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             return new SuccessDataResult<List<CarDetailDto>>(_cardal.GetCarDetails(),Messages.SuccessMessage);
@@ -43,12 +54,18 @@ namespace Business.Concrete
 
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
-            return new SuccessDataResult<List<Car>>(_cardal.GetAll(p => p.BrandId == id));
+            return new SuccessDataResult<List<Car>>(_cardal.GetAll(p => p.BrandId == id),Messages.SuccessMessage);
         }
 
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
-            return new SuccessDataResult<List<Car>>(_cardal.GetAll(p => p.ColorId == id));
+            return new SuccessDataResult<List<Car>>(_cardal.GetAll(p => p.ColorId == id),Messages.SuccessMessage);
+        }
+
+        public IResult Update(Car car)
+        {
+            _cardal.Update(car);
+            return new SuccessResult(Messages.SuccessMessage);
         }
     }
 }

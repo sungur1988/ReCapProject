@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Results;
+using DataAccess.Abstract;
 using DataAccess.Concrete.EfCarDal;
 using Entities.Concrete;
 using System;
@@ -8,13 +10,19 @@ using System.Text;
 
 namespace Business.Concrete
 {
-    class ColorManager : IColorService
+    public class ColorManager : IColorService
     {
-        EfColorDal _colordal;
+        IColorDal _colordal;
 
-        public ColorManager(EfColorDal colordal)
+        public ColorManager(IColorDal colordal)
         {
             _colordal = colordal;
+        }
+
+        public IResult Add(Color color)
+        {
+            _colordal.Add(color);
+            return new SuccessResult(Messages.ColorAddedSuccessMessage);
         }
 
         public IDataResult<List<Color>> GetAll()
@@ -26,6 +34,12 @@ namespace Business.Concrete
         public IDataResult<Color> GetById(int id)
         {
             return new SuccessDataResult<Color>(_colordal.Get(c => c.ColorId == id));
+        }
+
+        public IResult Update(Color color)
+        {
+            _colordal.Update(color);
+            return new SuccessResult(Messages.ColorUpdatedSuccessMessage);
         }
     }
 }
